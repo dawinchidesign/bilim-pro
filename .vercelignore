@@ -1,0 +1,4 @@
+netlify/
+dev-server.mjs
+tests/
+.data/

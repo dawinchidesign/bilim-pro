@@ -1,0 +1,351 @@
+/* Білім PRO — Pro қабаты: Inter қарпі, жаңа батырмалар, пәндер, мұғалім кабинеті, жаңа зертханалар.
+   Түстер палитрасы сақталды: изумруд (--ink), лайм (--lime), күлгін, сары, көкшіл. */
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-cyrillic-wght-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-cyrillic-ext-wght-normal.woff2) format("woff2");unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F}
+
+:root{
+ font-family:"Inter","Segoe UI",system-ui,Arial,sans-serif;font-feature-settings:"cv11","ss01";
+ --ease:cubic-bezier(.2,.8,.2,1);
+ --ring:0 0 0 4px #d5f59166,0 0 0 1px #2c7566;
+ --s-informatics:#2c7566;--s-informatics-bg:#e5f3d9;
+ --s-math:#7253a0;--s-math-bg:#efe8fa;
+ --s-physics:#a06a21;--s-physics-bg:#fdefd9;
+ --s-mathlit:#2f6f86;--s-mathlit-bg:#e1eff3;
+ --card-shadow:0 1px 0 #ffffff inset,0 1px 2px #12302b0a,0 10px 30px -12px #12302b1f;
+}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+#main:focus{outline:none}
+h1,h2,h3,h4{letter-spacing:-.025em}
+.page-heading h1{letter-spacing:-.035em}
+::selection{background:#d5f591;color:#193c3a}
+
+/* ── Оқылуы жақсартылған мәтін өлшемдері ── */
+.panel p,.lesson-content p,.course-body .tag{font-size:13.5px}
+.lesson-content p{font-size:15.5px;line-height:1.75;color:#4c5d5b}
+.notice{font-size:12.5px!important;line-height:1.7}
+.feedback{font-size:13.5px}
+.page-heading p{font-size:14px}
+.muted{color:var(--muted)}
+.small-print{font-size:12.5px;margin-top:14px}
+.small-print a{color:var(--teal);font-weight:650;text-decoration:underline;text-underline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── Батырмалар: жұмсақ градиент, жарқыл, сырғитын жебе ── */
+.btn{
+ --b1:#2a5a4b;--b2:#173f35;--bt:#fff;--bb:#0d2a23;
+ position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+ min-height:46px;padding:12px 18px 12px 20px;border-radius:14px;border:1px solid #0e2f27;
+ background:linear-gradient(180deg,var(--b1),var(--b2));color:var(--bt);
+ font-size:13px;font-weight:650;letter-spacing:-.005em;line-height:1.2;
+ box-shadow:inset 0 1px 0 #ffffff26,0 1px 2px #0b221c33,0 8px 18px -8px #0f2f2780;
+ transition:transform .25s var(--ease),box-shadow .25s var(--ease),filter .25s var(--ease),background .25s;
+ text-decoration:none;cursor:pointer;white-space:nowrap
+}
+.btn:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 30%,#ffffff2e 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
+.btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 #ffffff2e,0 2px 4px #0b221c26,0 14px 26px -10px #0f2f2799;filter:saturate(1.05)}
+.btn:hover:before{transform:translateX(120%)}
+.btn:active{transform:translateY(0) scale(.98);box-shadow:inset 0 2px 4px #00000026,0 1px 2px #0b221c26}
+.btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.btn>span:not(.btn-ripple):not(.btn-spinner):last-child{display:inline-grid;place-items:center;min-width:26px;height:26px;margin-right:-6px;border-radius:9px;background:#ffffff1f;font-size:13px;transition:transform .25s var(--ease),background .25s}
+.btn:hover>span:not(.btn-ripple):not(.btn-spinner):last-child{transform:translateX(2px);background:#ffffff33}
+.btn.lime{--b1:#e6fbbf;--b2:#c9ec8d;--bt:#163a26;border-color:#b3d77a;box-shadow:inset 0 1px 0 #ffffffb3,0 1px 2px #3c5a1a26,0 10px 22px -10px #6d9a3399}
+.btn.lime>span:not(.btn-ripple):not(.btn-spinner):last-child{background:#173c2d;color:#d5f591}
+.btn.lime:hover>span:not(.btn-ripple):not(.btn-spinner):last-child{background:#0f2f22}
+.btn.lime:hover{box-shadow:inset 0 1px 0 #ffffffcc,0 2px 4px #3c5a1a26,0 16px 30px -12px #6d9a33b3}
+.btn.secondary{--b1:#ffffff;--b2:#f6f9f0;--bt:#193c3a;border-color:#dbe4d1;box-shadow:inset 0 1px 0 #fff,0 1px 2px #12302b0f,0 6px 14px -8px #12302b26}
+.btn.secondary>span:not(.btn-ripple):not(.btn-spinner):last-child{background:#eef4e4}
+.btn.secondary:hover{border-color:#c7d6b8;box-shadow:inset 0 1px 0 #fff,0 2px 4px #12302b14,0 12px 22px -10px #12302b33}
+.btn.danger{--b1:#fff6f2;--b2:#fbe6de;--bt:#a5383d;border-color:#efcfc4;box-shadow:inset 0 1px 0 #fff,0 6px 14px -8px #a5383d40}
+.btn.danger:hover{--b1:#fdeee8;--b2:#f8d9cd}
+.btn.text{background:none;border:0;box-shadow:none;color:var(--teal);padding:6px 2px;min-height:0;overflow:visible}
+.btn.text:before{display:none}
+.btn.text:hover{transform:none;box-shadow:none;text-decoration:underline;text-underline-offset:4px}
+.hero .btn.text{color:#cfe7c4}
+.btn.small{min-height:36px;padding:8px 13px;font-size:12px;border-radius:11px}
+.btn.small>span:not(.btn-ripple):not(.btn-spinner):last-child{min-width:20px;height:20px;border-radius:7px;font-size:11px}
+.btn.wide{width:100%}
+.btn:disabled,.btn[disabled]{opacity:.5;transform:none;filter:grayscale(.3);cursor:not-allowed;box-shadow:none}
+.btn:disabled:before{display:none}
+.btn-spinner{width:15px;height:15px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.icon-btn{transition:transform .2s var(--ease),background .2s}
+.icon-btn:hover{transform:translateY(-1px)}
+.icon-btn.small{width:28px;height:28px;font-size:15px;border-radius:8px}
+
+/* ── Сынып және пән қойындылары ── */
+.grade-tabs button{font-size:12.5px;font-weight:600;border-radius:11px;padding:8px 14px;transition:all .2s var(--ease)}
+.grade-tabs button:hover:not(.active){border-color:#c7d6b8;color:var(--ink);background:#fbfdf7}
+.subject-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.subject-chip{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:6px 16px 6px 7px;border-radius:999px;border:1px solid #dfe7d6;background:linear-gradient(#fff,#f9fbf5);color:#3c514e;font-size:13px;font-weight:650;box-shadow:0 1px 2px #12302b0d;transition:all .25s var(--ease)}
+.subject-chip i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font-style:normal;font-size:13px;font-weight:800;background:var(--sbg,#eef4e4);color:var(--sc,#2c7566)}
+.subject-chip:hover{transform:translateY(-1px);border-color:#c8d6ba;box-shadow:0 8px 18px -10px #12302b40}
+.subject-chip.active{background:linear-gradient(180deg,#244f43,#173c33);border-color:#173c33;color:#fff;box-shadow:0 10px 22px -10px #0f2f27aa}
+.subject-chip.active i{background:var(--lime);color:#173c2d}
+.s-informatics{--sc:var(--s-informatics);--sbg:var(--s-informatics-bg)}
+.s-math{--sc:var(--s-math);--sbg:var(--s-math-bg)}
+.s-physics{--sc:var(--s-physics);--sbg:var(--s-physics-bg)}
+.s-mathlit{--sc:var(--s-mathlit);--sbg:var(--s-mathlit-bg)}
+.s-all{--sc:#2c7566;--sbg:#eef4e4}
+.badge.subject-badge{background:var(--sbg);color:var(--sc);border-color:transparent;font-weight:700}
+
+/* ── Пән карточкалары (басты бет) ── */
+.subject-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:34px}
+.subject-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;padding:22px 22px 20px;border-radius:22px;background:linear-gradient(160deg,#fff 40%,var(--sbg));border:1px solid #e3eadb;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.subject-card:after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--sbg) 0,transparent 70%);opacity:.9;pointer-events:none}
+.subject-card:hover{transform:translateY(-4px);box-shadow:0 1px 0 #fff inset,0 22px 40px -18px #12302b40}
+.subject-icon{position:relative;z-index:1;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:#fff;color:var(--sc);font:800 21px/1 "Inter",sans-serif;box-shadow:0 1px 0 #fff inset,0 8px 18px -8px var(--sc);margin-bottom:10px}
+.subject-motto{font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:750;color:var(--sc)}
+.subject-card h3{font-size:19px;margin:0}
+.subject-card p{font-size:13px;line-height:1.6;margin:0 0 6px;color:#64736f;flex:1}
+.subject-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:650;color:#4a5d5a}
+.subject-card .progress-bar{margin:8px 0 0;height:6px;background:#ffffffaa}
+.subject-card .progress-bar span{background:var(--sc)}
+
+/* ── Курс карточкалары ── */
+.course-card .tag{display:flex;align-items:center;gap:7px;font-size:12px!important}
+.subject-dot{width:7px;height:7px;border-radius:50%;background:var(--s-informatics)}
+.subj-math .subject-dot{background:var(--s-math)}.subj-physics .subject-dot{background:var(--s-physics)}.subj-mathlit .subject-dot{background:var(--s-mathlit)}
+.course-card h3{font-size:16.5px;line-height:1.35}
+.course-bottom span{font-size:12px}
+.done-mark{color:var(--teal);font-weight:700}
+.cover-author{position:absolute;z-index:3;right:12px;top:12px;font-size:10px;font-weight:700;padding:4px 9px;border-radius:999px;background:#173c33;color:var(--lime)}
+.card-author{font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.topic-strip.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.strip-card{transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.strip-card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -18px #12302b40}
+.strip-card h3{font-size:15px}
+.strip-card p{font-size:12px}
+.teacher-strip{background:linear-gradient(120deg,#173c33,#24584a)!important;border-color:#173c33!important}
+.teacher-strip h3{color:#fff}.teacher-strip p{color:#bcd5c7}
+.teacher-strip .strip-icon{background:var(--lime)!important;color:#173c2d!important}
+.teacher-strip .round-arrow{background:#ffffff1a;color:var(--lime);border-color:#ffffff22}
+
+/* ── Сабақ беті ── */
+.author-line{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:-4px 0 18px;border-radius:14px;background:#f6f9f1;border:1px solid #e5ecdc}
+.author-line b{display:block;color:var(--ink);font-size:14px}
+.author-line small{color:var(--muted)}
+.author-mini{display:inline-grid;place-items:center;flex:0 0 auto;width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#e6fbbf,#c9ec8d);color:#173c2d;font-weight:800;font-size:12.5px}
+.key-points li{font-size:14.5px}
+.board-scene{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;width:100%}
+.board-lines{display:grid;gap:8px;padding:16px;border-radius:16px;background:linear-gradient(160deg,#173c33,#0f2b25);box-shadow:inset 0 1px 0 #ffffff14;min-height:170px;align-content:start}
+.board-line{display:flex;gap:12px;align-items:baseline;padding:7px 10px;border-radius:10px;color:#a9c4b8;transition:background .3s}
+.board-line small{font:700 11px ui-monospace,monospace;color:#6f8f82}
+.board-line code{font:600 15px/1.45 ui-monospace,"SFMono-Regular",Menlo,monospace;color:#d9eadf;white-space:pre-wrap}
+.board-line.lit{background:#d5f5911a;box-shadow:inset 3px 0 0 var(--lime)}
+.board-line.lit code{color:#effbd7}
+.board-scene .scene-caption{max-width:160px}
+.loader{width:34px;height:34px;margin:6px auto;border-radius:50%;border:3px solid #dfe8d4;border-top-color:var(--teal);animation:spin .8s linear infinite}
+.loading-block{grid-column:1/-1;text-align:center;padding:36px 10px;color:var(--muted)}
+
+/* ── Зертханалар ── */
+.lab-visual.formula{font-size:21px;letter-spacing:-.02em}
+.lab-card .subject-badge{margin:14px 0 -4px;align-self:flex-start}
+.range-field{display:grid;gap:8px;margin:0 0 18px;font-size:13.5px;color:#4b5e5a}
+.range-field b{color:var(--ink)}
+.range-field output{font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;background:linear-gradient(90deg,#c9ec8d,#2c7566)}
+input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:linear-gradient(90deg,#c9ec8d,#2c7566)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-8px;border-radius:50%;background:#fff;border:3px solid #173c33;box-shadow:0 4px 10px #12302b40;transition:transform .2s}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid #173c33;box-shadow:0 4px 10px #12302b40}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+input[type=range]:focus-visible{outline:none}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:var(--ring)}
+.graph-wrap,.circuit-wrap{display:flex;justify-content:center;margin:10px 0 4px}
+.graph-svg{width:min(100%,360px);height:auto}
+.graph-svg .plot-bg{fill:#fbfdf7;stroke:#e1e9d7}
+.graph-svg .grid{stroke:#e8eedf;stroke-width:1}
+.graph-svg .axis{stroke:#8ea597;stroke-width:1.6}
+.graph-svg .axis-label{font:700 11px Inter,sans-serif;fill:#6d7c79}
+.graph-svg .plot-line{stroke:#2c7566;stroke-width:3.5;stroke-linecap:round;transition:stroke .3s}
+.graph-svg .plot-line.won{stroke:#5d9a37}
+.graph-svg .target-point{fill:#efe8fa;stroke:#7253a0;stroke-width:3}
+.graph-svg .point-label{font:700 11px Inter,sans-serif;fill:#7253a0}
+.graph-svg .intercept{fill:#d5f591;stroke:#173c33;stroke-width:2}
+.formula-value{font-size:30px!important;letter-spacing:-.02em}
+.circuit-svg{width:min(100%,460px);height:auto;overflow:visible}
+.circuit-svg .wire{fill:none;stroke:#cfdccb;stroke-width:8}
+.circuit-svg .current{fill:none;stroke:#2c7566;stroke-width:3;stroke-dasharray:4 16;stroke-linecap:round;animation:flow var(--flow,1s) linear infinite}
+.circuit-svg .current.still{animation:none;opacity:.25}
+@keyframes flow{to{stroke-dashoffset:-40}}
+.circuit-svg .battery rect{fill:#173c33}.circuit-svg .battery path{stroke:#d5f591;stroke-width:3;stroke-linecap:round}
+.circuit-svg .resistor rect{fill:#fdefd9;stroke:#a06a21;stroke-width:2}.circuit-svg .resistor path{fill:none;stroke:#a06a21;stroke-width:2.2;stroke-linejoin:round}
+.circuit-svg .bulb circle{fill:color-mix(in srgb,#ffe08a calc(var(--glow)*100%),#f4f1e6);stroke:#a06a21;stroke-width:2.5}
+.circuit-svg .bulb path{fill:none;stroke:#a06a21;stroke-width:2}
+.circuit-svg .bulb-glow{fill:#ffe9a8;filter:blur(8px);transition:r .3s,opacity .3s}
+.circuit-svg .circuit-label{font:700 13px Inter,sans-serif;fill:#435a55}
+.circuit-svg .circuit-label.center{text-anchor:middle}
+.circuit-svg .circuit-label.strong{font-size:18px;fill:#173c33}
+.motion-off .circuit-svg .current{animation:none}
+@media (prefers-reduced-motion:reduce){.circuit-svg .current{animation:none}}
+.ohm-readout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 6px}
+.ohm-readout div{padding:10px 12px;border-radius:14px;background:#f6f9f1;border:1px solid #e4ebdb;text-align:center}
+.ohm-readout small{display:block;font-size:11px;color:var(--muted)}
+.ohm-readout b{font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ohm-readout .hl{background:linear-gradient(160deg,#e6fbbf,#cdee95);border-color:#bfe08a}
+
+/* ── Формалар ── */
+.field{display:grid;gap:7px;margin:0 0 15px;min-width:0}
+.field-label{font-size:12.5px;font-weight:650;color:#3e524e;display:flex;align-items:center;gap:6px}
+.field-hint{font-size:11.5px;color:#8a978f}
+.text-input{width:100%;min-height:46px;padding:11px 14px;border-radius:13px;border:1px solid #dae3d1;background:#fff;color:var(--ink);font-size:14px;box-shadow:inset 0 1px 2px #12302b0a;transition:border-color .2s,box-shadow .2s}
+textarea.text-input{resize:vertical;line-height:1.6;min-height:84px}
+.text-input.mono{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:13px}
+.text-input::placeholder{color:#a6b2a9}
+.text-input:hover{border-color:#c4d2b8}
+.text-input:focus{outline:none;border-color:#2c7566;box-shadow:0 0 0 4px #d5f59180}
+.text-input:disabled{background:#f4f6f0;color:#8a978f}
+select.text-input{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#2c7566 50%),linear-gradient(135deg,#2c7566 50%,transparent 50%);background-position:calc(100% - 19px) 50%,calc(100% - 14px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+.code-input{font:800 24px ui-monospace,monospace;letter-spacing:.35em;text-align:center;text-transform:uppercase}
+.field-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-pair.wide-first{grid-template-columns:2fr 1fr}
+.field-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.check-chips{display:flex;flex-wrap:wrap;gap:8px}
+.check-chip{position:relative;cursor:pointer}
+.check-chip input{position:absolute;opacity:0;pointer-events:none}
+.check-chip span{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;border:1px solid #dbe4d1;background:#fff;font-size:13px;font-weight:600;color:#4a5d5a;transition:all .2s var(--ease)}
+.check-chip i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;font-style:normal;font-weight:800;font-size:12px;background:var(--sbg);color:var(--sc)}
+.check-chip input:checked+span{background:var(--sbg);border-color:var(--sc);color:var(--ink);box-shadow:0 0 0 1px var(--sc) inset}
+.check-chip input:focus-visible+span{box-shadow:var(--ring)}
+.toggle-line{display:flex;align-items:center;gap:10px;margin:4px 0 18px;font-size:13.5px;color:#4a5d5a;cursor:pointer}
+.toggle-line input{width:18px;height:18px;accent-color:#2c7566}
+.form-error{padding:12px 14px;margin:0 0 16px;border-radius:12px;background:#fdeee8;border:1px solid #f2cfc2;color:#a5383d;font-size:13.5px;font-weight:550}
+
+/* ── Кіру / тіркелу ── */
+.auth-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px;align-items:stretch}
+.auth-aside{position:relative;overflow:hidden;border-radius:26px;padding:36px;color:#cfe2d6;background:radial-gradient(ellipse at 100% 0,#2f6a55 0,transparent 55%),radial-gradient(ellipse at 0 100%,#d5f59122 0,transparent 50%),linear-gradient(160deg,#173e3a,#0f2a26);display:flex;flex-direction:column}
+.auth-aside:after{content:"";position:absolute;width:360px;height:360px;right:-150px;bottom:-170px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 40px #ffffff05,0 0 0 80px #ffffff04;pointer-events:none}
+.auth-aside .eyebrow{color:var(--lime)}
+.auth-aside h1{color:#fff;font-size:34px;line-height:1.15;margin:6px 0 24px;letter-spacing:-.04em}
+.auth-features{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:14px}
+.auth-features li{position:relative;padding-left:40px}
+.auth-features li:before{content:"✓";position:absolute;left:0;top:1px;display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:#d5f5911f;color:var(--lime);font-weight:800;font-size:13px}
+.auth-features b{display:block;color:#fff;font-size:14.5px}
+.auth-features span{font-size:13px;color:#a9c4b8}
+.auth-aside .mode-note{margin-top:auto}
+.auth-card{padding:30px;margin:0;box-shadow:var(--card-shadow)}
+.auth-card h2{margin:22px 0 4px;font-size:24px}
+.auth-card>p.muted{font-size:13.5px;margin-bottom:22px}
+.segmented{display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:15px;background:#eef3e7;border:1px solid #e1e9d7}
+.segmented a{text-align:center;padding:10px;border-radius:11px;font-size:13.5px;font-weight:650;color:#61716d;transition:all .25s var(--ease)}
+.segmented a.active{background:#fff;color:var(--ink);box-shadow:0 1px 2px #12302b14,0 6px 14px -8px #12302b40}
+.mode-note{display:grid;gap:3px;padding:13px 16px;border-radius:14px;font-size:12.5px;line-height:1.55;margin:18px 0 0}
+.mode-note b{font-size:12.5px}
+.mode-note.cloud{background:#e9f5df;border:1px solid #d3e9bf;color:#3c6a3f}
+.mode-note.local{background:#fff5e4;border:1px solid #f0dfbc;color:#86622a}
+.auth-aside .mode-note.cloud{background:#d5f59114;border-color:#d5f59133;color:#cfe8be}
+.auth-aside .mode-note.local{background:#ffe6b414;border-color:#ffe6b433;color:#f3dcb0}
+.mode-wrap{grid-column:1/-1}
+
+/* ── Мұғалімдер тізімі ── */
+.teacher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.teacher-card{display:flex;gap:16px;padding:22px;border-radius:22px;background:#fff;border:1px solid #e3eadb;box-shadow:var(--card-shadow);transition:transform .3s var(--ease)}
+.teacher-card:hover{transform:translateY(-3px)}
+.teacher-card h3{font-size:17px;margin:6px 0 2px}
+.teacher-card p{font-size:13px;margin:6px 0}
+.teacher-card .row{gap:6px;margin:8px 0}
+.teacher-card.founder{grid-column:1/-1;background:linear-gradient(120deg,#fff 50%,#eef7e3)}
+.teacher-avatar{flex:0 0 auto;display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#244f43,#173c33);color:var(--lime);font-weight:800;font-size:18px;letter-spacing:.02em;box-shadow:0 10px 20px -10px #0f2f27aa}
+.teacher-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;padding-top:12px;border-top:1px solid #edf1e7;font-size:12.5px;color:var(--muted)}
+.empty-invite{text-align:center;padding:34px 22px}
+.empty-invite p{max-width:520px;margin:8px auto 18px}
+
+/* ── Кабинет ── */
+.page-heading .btn{flex:0 0 auto}
+.cabinet-tabs{display:flex;gap:6px;padding:6px;margin:0 0 24px;border-radius:17px;background:#fff;border:1px solid #e3eadb;width:max-content;max-width:100%;overflow-x:auto;box-shadow:var(--card-shadow)}
+.cabinet-tabs a{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:650;color:#61716d;white-space:nowrap;transition:all .25s var(--ease)}
+.cabinet-tabs a i{font-style:normal;opacity:.7}
+.cabinet-tabs a:hover{color:var(--ink);background:#f5f8f0}
+.cabinet-tabs a.active{background:linear-gradient(180deg,#244f43,#173c33);color:#fff}
+.cabinet-tabs a.active i{color:var(--lime);opacity:1}
+.cabinet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;align-items:start}
+.cabinet-grid .panel{margin:0}
+.create-class{background:linear-gradient(165deg,#fff 50%,#f0f8e6);border-color:#dfe9d2}
+.create-class h3{margin:12px 0 2px}
+.class-tile{position:relative;overflow:hidden;box-shadow:var(--card-shadow)}
+.class-tile:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:var(--sc)}
+.class-tile h3{margin:12px 0}
+.code-box{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#f6f9f1;border:1px dashed #cbd9bf}
+.code-box small{font-size:10px;letter-spacing:1.3px;font-weight:750;color:var(--muted)}
+.code-box b{font:800 22px ui-monospace,monospace;letter-spacing:.18em;color:var(--ink);margin-right:auto}
+.class-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;font-size:13px;font-weight:650;color:#4a5d5a;flex-wrap:wrap}
+.class-foot .row{gap:8px}
+.class-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin:6px 0 20px;flex-wrap:wrap}
+.class-head h2{font-size:28px;margin:10px 0 0}
+.invite-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px 12px 18px;border-radius:18px;background:linear-gradient(120deg,#173c33,#24584a);color:#fff}
+.invite-card small{display:block;font-size:10px;letter-spacing:1.3px;color:#a9c4b8;font-weight:700}
+.invite-card b{font:800 24px ui-monospace,monospace;letter-spacing:.2em;color:var(--lime);margin-right:8px}
+.metric-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.metric-row.compact{gap:8px;margin:4px 0 18px}
+.metric{padding:16px 18px;border-radius:18px;background:#fff;border:1px solid #e3eadb;box-shadow:var(--card-shadow)}
+.metric small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.metric b{font-size:26px;color:var(--ink);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.compact .metric{padding:10px 12px;box-shadow:none}.compact .metric b{font-size:20px}
+.table-panel{padding:20px 20px 8px}
+.table-panel .section-heading h3{margin:0}
+.table-scroll{overflow-x:auto;margin:0 -20px;padding:0 20px}
+.data-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+.data-table th{text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#8a978f;font-weight:700;padding:10px 10px;border-bottom:1px solid #e6ece0}
+.data-table td{padding:11px 10px;border-bottom:1px solid #f0f3eb;color:#3e524e;vertical-align:middle}
+.data-table tbody tr{transition:background .2s}
+.data-table tbody tr:hover{background:#f8fbf3}
+.data-table tr:last-child td{border-bottom:0}
+.student-name{display:flex;align-items:center;gap:10px;background:none;padding:0;color:var(--ink);font-weight:650;font-size:13.5px;text-align:left}
+.student-name:hover{color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+.student-name .author-mini{width:30px;height:30px;font-size:11px;border-radius:9px}
+.pct{display:inline-block;padding:3px 9px;border-radius:999px;font-weight:700;font-size:12px}
+.pct.hi{background:#e5f3d9;color:#2f6a3a}.pct.mid{background:#fdf1d9;color:#946414}.pct.lo{background:#fdeae4;color:#a5383d}
+.my-lessons{display:grid;gap:12px}
+.my-lesson{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0;border-left:5px solid var(--sc)}
+.my-lesson h3{margin:10px 0 2px}
+.my-lesson p{margin:0}
+.my-lesson .row{gap:8px;flex-wrap:nowrap}
+.lesson-editor .panel{box-shadow:var(--card-shadow)}
+.question-edit{position:relative;border:1px solid #e3eadb;border-radius:18px;padding:18px 18px 4px;margin:0 0 14px;background:#fbfdf8}
+.question-edit legend{padding:4px 12px;border-radius:999px;background:#173c33;color:var(--lime);font-size:12px;font-weight:700}
+.q-remove{position:absolute;right:12px;top:12px}
+.wrong-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ok-dot{width:9px;height:9px;border-radius:50%;background:#5d9a37;box-shadow:0 0 0 3px #e5f3d9}
+.correct-input{border-color:#bcdca6;background:#f7fcf1}
+.editor-actions{position:sticky;bottom:12px;z-index:5;display:flex;justify-content:flex-end;gap:10px;padding:12px;border-radius:18px;background:#ffffffd9;backdrop-filter:blur(10px);border:1px solid #e3eadb;box-shadow:0 18px 40px -20px #12302b55}
+.profile-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.profile-grid>div{display:grid;gap:18px}
+.danger-zone{border-color:#f2d6cc;background:linear-gradient(165deg,#fff 55%,#fff3ee)}
+.class-card{display:grid;gap:4px;border-left:5px solid #c9ec8d;box-shadow:var(--card-shadow)}
+.class-card.joined{border-left-color:#2c7566;background:linear-gradient(120deg,#fff 50%,#eef7e3)}
+.class-card h3{margin:8px 0 2px}
+.class-card .row{gap:8px;margin-top:6px;align-items:center}
+.top-profile.teacher{background:linear-gradient(135deg,#244f43,#173c33);color:var(--lime)}
+.nav-badge.on{background:transparent;color:var(--lime);font-size:8px}
+nav a.active .nav-badge.on{color:#2c7566}
+.subject-progress strong{font-size:22px;color:var(--sc)}
+.review-item.ok{border-left:4px solid #9fd07a}.review-item.miss{border-left:4px solid #f0b8a5}
+
+/* ── Бейімделу ── */
+@media(max-width:1200px){.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.topic-strip.three{grid-template-columns:1fr 1fr}.topic-strip.three .teacher-strip{grid-column:1/-1}}
+@media(max-width:980px){.auth-layout{grid-template-columns:1fr}.auth-aside{padding:28px}.auth-aside h1{font-size:28px}.metric-row{grid-template-columns:1fr 1fr}.profile-grid{grid-template-columns:1fr}.board-scene{grid-template-columns:1fr}.my-lesson{flex-direction:column;align-items:flex-start}.my-lesson .row{flex-wrap:wrap}}
+@media(max-width:680px){
+ .btn{font-size:12.5px;min-height:44px;padding:11px 15px 11px 16px}
+ .subject-grid{grid-template-columns:1fr;gap:12px}
+ .subject-card{padding:18px}
+ .subject-tabs{flex-wrap:nowrap;overflow-x:auto;margin-left:-16px;margin-right:-16px;padding:2px 16px 6px;scrollbar-width:none}
+ .subject-tabs::-webkit-scrollbar{display:none}
+ .subject-chip{flex:0 0 auto}
+ .topic-strip.three{grid-template-columns:1fr}
+ .field-pair,.field-pair.wide-first,.field-grid,.wrong-grid{grid-template-columns:1fr;gap:0}
+ .auth-card{padding:20px}
+ .auth-aside{padding:22px;border-radius:22px}
+ .auth-aside h1{font-size:24px}
+ .teacher-grid{grid-template-columns:1fr}
+ .teacher-card{padding:18px}
+ .ohm-readout{grid-template-columns:1fr 1fr}
+ .formula-value{font-size:24px!important}
+ .class-head h2{font-size:22px}
+ .invite-card{width:100%}
+ .editor-actions{bottom:8px}
+ .page-heading{flex-wrap:wrap}
+ .lesson-content p{font-size:15px}
+}
+@media print{.editor-actions,.cabinet-tabs{display:none}}
+.lab-stage .ohm-readout+.control-row,.lab-stage .formula-value+.control-row{margin-top:18px}

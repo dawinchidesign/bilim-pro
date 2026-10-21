@@ -1,0 +1,45 @@
+[
+  {
+    "repository": "juliangarnier/anime",
+    "ref": "v3.2.2",
+    "path": "lib/anime.min.js",
+    "local": "vendor/anime.min.js",
+    "upstream_blob_sha": "5f19b3da70b72a90437a02913db28736833f3660"
+  },
+  {
+    "repository": "juliangarnier/anime",
+    "ref": "v3.2.2",
+    "path": "LICENSE.md",
+    "local": "vendor/licenses/anime-MIT.md",
+    "upstream_blob_sha": "78b6ebfe1840202d4147dd2726f464965afc8c57"
+  },
+  {
+    "repository": "catdad/canvas-confetti",
+    "ref": "20eebad51dde793070c373d594099a7ed8d96e22",
+    "path": "src/confetti.js",
+    "local": "vendor/confetti.browser.js",
+    "upstream_blob_sha": "3eec864ebf6d07511b062d77cc3047c2108c6ee2",
+    "build": "Official browser IIFE from upstream build/build.js"
+  },
+  {
+    "repository": "catdad/canvas-confetti",
+    "ref": "20eebad51dde793070c373d594099a7ed8d96e22",
+    "path": "LICENSE",
+    "local": "vendor/licenses/confetti-ISC.txt",
+    "upstream_blob_sha": "d703e2ecc9af0d5919992e4326d7f85ca8e7c95f"
+  },
+  {
+    "repository": "micku7zu/vanilla-tilt.js",
+    "ref": "48f4ee931d4d91dcdd2f91803db67a9f3a16587e",
+    "path": "dist/vanilla-tilt.min.js",
+    "local": "vendor/vanilla-tilt.min.js",
+    "upstream_blob_sha": "4524805da0bc0bba9e3b264d2f836e5b55d1d729"
+  },
+  {
+    "repository": "micku7zu/vanilla-tilt.js",
+    "ref": "48f4ee931d4d91dcdd2f91803db67a9f3a16587e",
+    "path": "LICENSE",
+    "local": "vendor/licenses/vanilla-tilt-MIT.txt",
+    "upstream_blob_sha": "6a0fe3643d8db004dc92e9408f30b97f57ce00fa"
+  }
+]

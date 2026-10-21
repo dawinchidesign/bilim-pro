@@ -1,0 +1,58 @@
+[
+  {
+    "section": "home",
+    "media_id": "MAHYRcXnckw",
+    "version": "1",
+    "local": "assets/canva/home.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRcXnckw?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "courses",
+    "media_id": "MAHYRcUPBOE",
+    "version": "1",
+    "local": "assets/canva/courses.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRcUPBOE?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "olympiad",
+    "media_id": "MAHYRYsSWyw",
+    "version": "1",
+    "local": "assets/canva/olympiad.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRYsSWyw?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "exam",
+    "media_id": "MAHYRSqBTTQ",
+    "version": "1",
+    "local": "assets/canva/exam.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRSqBTTQ?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "labs",
+    "media_id": "MAHYRWupNTg",
+    "version": "1",
+    "local": "assets/canva/labs.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRWupNTg?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "progress",
+    "media_id": "MAHYRVUBSWM",
+    "version": "1",
+    "local": "assets/canva/progress.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRVUBSWM?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  },
+  {
+    "section": "about",
+    "media_id": "MAHYRcKo33I",
+    "version": "1",
+    "local": "assets/canva/about.jpg",
+    "canva_url": "https://www.canva.com/M/MAHYRcKo33I?utm_source=OC-AaBlKrqBJJNF&utm_campaign=agent_connector_create_image_asset_opened",
+    "local_asset_kind": "connector preview; original available at Canva URL"
+  }
+]

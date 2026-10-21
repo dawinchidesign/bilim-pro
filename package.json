@@ -1,0 +1,16 @@
+{
+  "name": "bilim-pro",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Білім PRO — 5–11 сыныптарға арналған оқу платформасы",
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "test": "node tests/api.test.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
