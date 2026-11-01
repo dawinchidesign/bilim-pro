@@ -118,5 +118,47 @@ async function parse(file,subjects){
  const zip=readZip(await file.arrayBuffer());
  return interpret(await paragraphs(zip),subjects);
 }
-window.BilimDocx={parse,interpret};
+
+/* Олимпиада есептері: бір файлда бірнеше есеп.
+   «ЕСЕП» жолы жаңа есепті бастайды; өрістер: Атауы, Пән, Сынып, Деңгейі, Шарты, Берілгені, Жауап, Көмек, Шешуі.
+   Бірінші «ЕСЕП» алдындағы Пән/Сынып/Деңгейі барлық есептерге ортақ болады. */
+const CH_FIELD=/^(атауы|атау|пән|сынып|деңгейі|деңгей|шарты|шарт|берілгені|жауабы|жауап|дұрыс жауап|көмек|шешуі|шешу жолы|шешімі)\s*:\s*(.*)$/i;
+const CH_KEY={'атауы':'title','атау':'title','пән':'subject','сынып':'grade','деңгейі':'level','деңгей':'level','шарты':'task','шарт':'task','берілгені':'input','жауабы':'answer','жауап':'answer','дұрыс жауап':'answer','көмек':'hint','шешуі':'solution','шешу жолы':'solution','шешімі':'solution'};
+function findSubject(v,subjects){v=v.toLowerCase().trim();return subjects.find(s=>[s.name,s.short,s.id].some(n=>n.toLowerCase()===v))||subjects.find(s=>v.startsWith(s.short.toLowerCase().replace('.',''))||s.name.toLowerCase().startsWith(v));}
+function interpretChallenges({items},subjects){
+ const defaults={subject:null,grade:null,level:null},list=[],warn=[];let cur=null,field=null,instructions=false,started=false;
+ const levelOf=v=>{v=v.toLowerCase();return v.startsWith('жең')?'Жеңіл':v.startsWith('күр')?'Күрделі':v.startsWith('ойл')||v.startsWith('орт')?'Ойлан':null;};
+ const setField=(target,key,v)=>{
+  if(key==='subject'){const s=findSubject(v,subjects);if(s)target.subject=s.id;else if(v)warn.push(`«${v}» пәні табылмады.`);}
+  else if(key==='grade'){const g=parseInt(v,10);if(g>=5&&g<=11)target.grade=g;}
+  else if(key==='level'){const l=levelOf(v);if(l)target.level=l;}
+  else target[key]=v;
+ };
+ for(const it of items){
+  const t=it.text;if(!t)continue;const low=t.toLowerCase().replace(/[:.]\s*$/,'').trim();
+  if(/^(нұсқау|нұсқаулық|инструкция)$/.test(low)){instructions=true;continue;}
+  if(/^(есеп|тапсырма|олимпиада есебі)(\s*№?\s*\d+)?$/.test(low)){instructions=false;started=true;cur={title:'',task:'',input:'',answer:'',hint:'',solution:''};list.push(cur);field=null;continue;}
+  const m=t.match(CH_FIELD);
+  if(instructions&&!m)continue;
+  if(m){instructions=false;const key=CH_KEY[m[1].toLowerCase()],v=m[2].trim();
+   if(!cur&&['subject','grade','level'].includes(key)){setField(defaults,key,v);continue;}
+   if(!cur){cur={title:'',task:'',input:'',answer:'',hint:'',solution:''};list.push(cur);started=true;}
+   setField(cur,key,v);field=['task','input','hint','solution'].includes(key)?key:null;continue;}
+  if(cur&&field){cur[field]=(cur[field]?cur[field]+'\n':'')+t;continue;}
+  if(cur&&!cur.task){cur.task=t;field='task';}
+ }
+ const out=list.filter(c=>c.task||c.answer||c.title).map((c,i)=>{
+  const n=i+1,x={subject:c.subject||defaults.subject,grade:c.grade||defaults.grade||8,level:c.level||defaults.level||'Ойлан',title:c.title||(c.task.split(/[.?!\n]/)[0]||'').slice(0,80),task:c.task,input:c.input,answer:c.answer,hint:c.hint,solution:c.solution,problems:[]};
+  if(!x.task)x.problems.push('шарты жоқ');if(!x.answer)x.problems.push('жауабы жоқ');if(!x.subject)x.problems.push('пәні көрсетілмеген');if(x.title.length<3)x.problems.push('атауы жоқ');
+  if(x.problems.length)warn.push(`${n}-есеп: ${x.problems.join(', ')}.`);
+  return x;});
+ if(!out.length)warn.push('Есептер табылмады. Әр есепті «ЕСЕП» деген жолдан бастаңыз (үлгіні қараңыз).');
+ return {challenges:out,warnings:warn};
+}
+async function parseChallenges(file,subjects){
+ if(!/\.docx$/i.test(file.name))throw new Error(/\.doc$/i.test(file.name)?'Ескі .doc форматы оқылмайды. Word-та «Басқаша сақтау → Word құжаты (.docx)» таңдаңыз.':'Тек .docx форматындағы Word файлын таңдаңыз.');
+ if(file.size>15*1024*1024)throw new Error('Файл тым үлкен (15 МБ-тан аспауы керек).');
+ return interpretChallenges(await paragraphs(readZip(await file.arrayBuffer())),subjects);
+}
+window.BilimDocx={parse,interpret,parseChallenges,interpretChallenges};
 })();
