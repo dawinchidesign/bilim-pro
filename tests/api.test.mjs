@@ -93,4 +93,23 @@ ok((await call('DELETE', '/me', { password: 'wrong' }, tok)).status === 403, 'de
 ok((await call('DELETE', '/me', { password: 'newpass123' }, tok)).status === 200, 'delete account');
 ok(!Object.keys(db).some(k => k.startsWith('lesson/') && db[k].title === 'Жаңа атау'), 'teacher lessons removed');
 ok((await call('GET', '/nope')).status === 404, 'unknown route');
+
+// Мұғалімнің олимпиада есептері және жаңа пәндер
+r = await call('POST', '/auth/register', { name: 'Дана Әбенова', email: 'dana@school.kz', password: 'qwerty123', school: 'Мектеп', subjects: ['history', 'chemistry'] }, null, '9.9.9.9');
+ok(r.status === 200 && r.body.teacher.subjects.join() === 'history,chemistry', 'new subjects accepted');
+const ctok = r.body.token;
+const chBody = { subject: 'history', grade: 9, level: 'Ойлан', title: 'Қазақ хандығы', task: 'Қазақ хандығы қай жылы құрылды?', input: '', answer: '1465; 1465 жыл', hint: 'XV ғасыр', solution: 'Керей мен Жәнібек 1465 жылы.', visibility: 'public' };
+ok((await call('POST', '/challenges', { ...chBody, task: '' }, ctok)).status === 400, 'challenge needs task');
+ok((await call('POST', '/challenges', { ...chBody, subject: 'art' }, ctok)).status === 400, 'challenge subject validated');
+r = await call('POST', '/challenges', chBody, ctok);
+ok(r.status === 200 && r.body.challenge.id.startsWith('o-'), 'create challenge');
+const cid = r.body.challenge.id;
+await call('POST', '/challenges', { ...chBody, title: 'Тек сыныпқа', visibility: 'classes' }, ctok);
+ok((await call('GET', '/challenges')).body.challenges.length === 1, 'public challenges only');
+ok((await call('GET', '/challenges', null, ctok)).body.challenges.length === 2, 'owner sees own challenges');
+ok((await call('POST', '/challenges', chBody)).status === 401, 'anonymous cannot create challenge');
+ok((await call('PUT', `/challenges/${cid}`, { ...chBody, title: 'Жаңа атау' }, ctok)).body.challenge.title === 'Жаңа атау', 'edit challenge');
+ok((await call('GET', '/teachers')).body.teachers.find(t => t.name === 'Дана Әбенова').challenges === 1, 'teacher challenge count');
+ok((await call('DELETE', `/challenges/${cid}`, null, ctok)).status === 200, 'delete challenge');
+ok((await call('POST', '/lessons', { ...lessonBody, subject: 'geography', questions: Array.from({ length: 20 }, (_, i) => ({ q: `Сұрақ ${i}?`, answer: 'Иә', wrong: ['Жоқ', 'Мүмкін', 'Білмеймін'], explain: '' })) }, ctok)).status === 200, '20 questions allowed');
 console.log(`✓ ${passed} API тесті өтті`);

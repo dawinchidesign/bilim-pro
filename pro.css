@@ -349,3 +349,25 @@ nav a.active .nav-badge.on{color:#2c7566}
 }
 @media print{.editor-actions,.cabinet-tabs{display:none}}
 .lab-stage .ohm-readout+.control-row,.lab-stage .formula-value+.control-row{margin-top:18px}
+
+/* ── Жаңа пәндер ── */
+:root{--s-history:#8A4B2A;--s-history-bg:#F6E7DD;--s-geography:#2E6BA8;--s-geography-bg:#E1ECF8;--s-chemistry:#A3386A;--s-chemistry-bg:#F8E2EC}
+.s-history{--sc:var(--s-history);--sbg:var(--s-history-bg)}
+.s-geography{--sc:var(--s-geography);--sbg:var(--s-geography-bg)}
+.s-chemistry{--sc:var(--s-chemistry);--sbg:var(--s-chemistry-bg)}
+.subj-history .subject-dot{background:var(--s-history)}.subj-geography .subject-dot{background:var(--s-geography)}.subj-chemistry .subject-dot{background:var(--s-chemistry)}
+.lesson-content p{white-space:pre-line}
+.task-text{white-space:pre-line;font-size:15px;line-height:1.7;color:#33463F}
+.challenge-card.custom{border-color:#F0DFBC}
+.badge.orange{background:#FFF0DC;color:#96702E;border-color:transparent}
+.weekly .btn.text{margin-top:6px}
+/* ── Word-тан жүктеу ── */
+.word-import{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;background:linear-gradient(120deg,#F3F8FE 0%,#FBFCF8 60%);border-color:#D6E3F3}
+.word-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:linear-gradient(160deg,#2B6CC4,#1A4F9A);color:#fff;font:800 28px/1 Inter,Arial,sans-serif;box-shadow:0 10px 20px -10px #1A4F9A}
+.word-text h3{margin:0 0 4px}
+.word-text p{margin:0}
+.word-actions{display:flex;flex-direction:column;gap:8px}
+#word-report .feedback{margin:12px 0 0}
+#word-report ul{margin:6px 0 0;padding-left:20px}
+@media(max-width:980px){.word-import{grid-template-columns:auto 1fr}.word-actions{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}}
+@media(max-width:680px){.word-import{grid-template-columns:1fr}.word-icon{display:none}}

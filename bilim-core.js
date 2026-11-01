@@ -3,10 +3,10 @@
    және браузерде localStorage арқылы (жергілікті режим). Тек Web Crypto қолданылады. */
 (function(root){
 'use strict';
-const SUBJECT_IDS=['informatics','math','physics','mathlit'];
+const SUBJECT_IDS=['informatics','math','physics','mathlit','history','geography','chemistry'];
 const ITERATIONS=120000;
 const TOKEN_DAYS=30;
-const LIMITS={classes:30,students:80,lessons:100,questions:10};
+const LIMITS={classes:30,students:80,lessons:150,questions:20,challenges:150};
 const enc=new TextEncoder();
 const subtle=()=>globalThis.crypto.subtle;
 
@@ -59,12 +59,28 @@ function cleanLesson(b){
  return {subject,grade,title,tag,minutes,paras,points,code,questions,visibility};
 }
 
+// Мұғалімнің олимпиада есебі. Жауап сан немесе мәтін; бірнеше дұрыс нұсқа «;» арқылы бөлінеді.
+function cleanChallenge(b){
+ const subject=SUBJECT_IDS.includes(b.subject)?b.subject:fail(400,'Пәнді таңдаңыз.');
+ const grade=int(Number(b.grade),5,11,null);if(grade===null)fail(400,'Сынып 5–11 аралығында болуы керек.');
+ const level=['Жеңіл','Ойлан','Күрделі'].includes(b.level)?b.level:'Ойлан';
+ const title=text(b.title,90,{min:3,label:'Есептің атауы'});
+ const task=text(b.task,2500,{min:5,multiline:true,label:'Есептің шарты'});
+ const input=text(b.input,800,{multiline:true,label:'Берілгені'});
+ const answer=text(b.answer,200,{min:1,label:'Дұрыс жауап'});
+ if(!answer.split(';').some(a=>a.trim()))fail(400,'Дұрыс жауапты жазыңыз.');
+ const hint=text(b.hint,600,{multiline:true,label:'Көмек'});
+ const solution=text(b.solution,2500,{multiline:true,label:'Шешу жолы'});
+ const visibility=b.visibility==='classes'?'classes':'public';
+ return {subject,grade,level,title,task,input,answer,hint,solution,visibility};
+}
+
 function cleanProgress(p){
  p=p&&typeof p==='object'?p:{};
  const ids=v=>[...new Set((Array.isArray(v)?v:[]).filter(x=>typeof x==='string'&&/^[a-z0-9-]{1,40}$/.test(x)))].slice(0,400);
  const quiz={};if(p.quiz&&typeof p.quiz==='object')for(const [k,v] of Object.entries(p.quiz).slice(0,400))if(/^[a-z0-9-]{1,40}$/.test(k)&&Number.isInteger(v)&&v>=0&&v<=LIMITS.questions)quiz[k]=v;
  const history=(Array.isArray(p.history)?p.history:[]).slice(0,10).filter(h=>h&&Number.isInteger(h.score)&&Number.isInteger(h.total)&&h.total>0&&h.total<=60&&h.score>=0&&h.score<=h.total&&Number.isFinite(h.date)).map(h=>({score:h.score,total:h.total,date:h.date,subject:SUBJECT_IDS.includes(h.subject)?h.subject:'informatics'}));
- return {xp:int(p.xp,0,1e7,0),completed:ids(p.completed),quiz,solved:int(p.solved,0,1000,0),labs:ids(p.labs).slice(0,20),history};
+ return {xp:int(p.xp,0,1e7,0),completed:ids(p.completed),quiz,solved:int(p.solved,0,5000,0),labs:ids(p.labs).slice(0,20),history};
 }
 
 async function secretOf(store,opts){
@@ -142,11 +158,12 @@ async function route(req,store,opts){
   if(!same(await pbkdf2(String(body.password||'').slice(0,200),t.salt),t.hash))fail(403,'Құпиясөз қате.');
   for(const c of (await listValues(store,'class/')).filter(c=>c.teacherId===t.id))await deleteClass(store,c);
   for(const l of (await listValues(store,'lesson/')).filter(l=>l.teacherId===t.id))await store.del('lesson/'+l.id);
+  for(const c of (await listValues(store,'olymp/')).filter(c=>c.teacherId===t.id))await store.del('olymp/'+c.id);
   await store.del('email/'+await sha(t.email));await store.del('teacher/'+t.id);return {ok:true};
  }
  if(is('GET','teachers')){
-  const [teachers,lessons]=await Promise.all([listValues(store,'teacher/'),listValues(store,'lesson/')]);
-  return {teachers:teachers.filter(t=>t.public!==false).sort((a,b)=>a.created-b.created).map(t=>publicTeacher(t,{lessons:lessons.filter(l=>l.teacherId===t.id&&l.visibility==='public').length}))};
+  const [teachers,lessons,olymp]=await Promise.all([listValues(store,'teacher/'),listValues(store,'lesson/'),listValues(store,'olymp/')]);
+  return {teachers:teachers.filter(t=>t.public!==false).sort((a,b)=>a.created-b.created).map(t=>publicTeacher(t,{lessons:lessons.filter(l=>l.teacherId===t.id&&l.visibility==='public').length,challenges:olymp.filter(c=>c.teacherId===t.id&&c.visibility==='public').length}))};
  }
 
  if(is('GET','classes')){
@@ -226,6 +243,26 @@ async function route(req,store,opts){
   if(method==='DELETE'){await store.del('lesson/'+id);return {ok:true};}
   const l={...old,...cleanLesson(body),updated:Date.now()};await store.set('lesson/'+id,l);return {lesson:{...l,teacherName:t.name,teacherSchool:t.school,mine:true}};
  }
+ if(is('GET','challenges')){
+  const [items,teachers]=await Promise.all([listValues(store,'olymp/'),listValues(store,'teacher/')]);
+  let ownTeacherId=null,classTeacherId=null;
+  if(auth?.r==='t')ownTeacherId=auth.id;
+  if(auth?.r==='s'){const c=await store.get('class/'+auth.c);classTeacherId=c?.teacherId||null;}
+  const names=new Map(teachers.map(t=>[t.id,t]));
+  return {challenges:items.filter(c=>names.has(c.teacherId)&&(c.visibility==='public'||c.teacherId===ownTeacherId||c.teacherId===classTeacherId)).sort((a,b)=>a.created-b.created).map(c=>({...c,teacherName:names.get(c.teacherId).name,teacherSchool:names.get(c.teacherId).school,mine:c.teacherId===ownTeacherId}))};
+ }
+ if(is('POST','challenges')){
+  const t=await teacherFrom(store,auth);
+  if((await listValues(store,'olymp/')).filter(c=>c.teacherId===t.id).length>=LIMITS.challenges)fail(400,`Ең көбі ${LIMITS.challenges} есеп.`);
+  const c={id:'o-'+randomId(10),teacherId:t.id,...cleanChallenge(body),created:Date.now(),updated:Date.now()};
+  await store.set('olymp/'+c.id,c);return {challenge:{...c,teacherName:t.name,teacherSchool:t.school,mine:true}};
+ }
+ if(is('PUT','challenges','*')||is('DELETE','challenges','*')){
+  const t=await teacherFrom(store,auth),id=safeId(parts[1],'Есеп'),old=await store.get('olymp/'+id);
+  if(!old||old.teacherId!==t.id)fail(404,'Есеп табылмады.');
+  if(method==='DELETE'){await store.del('olymp/'+id);return {ok:true};}
+  const c={...old,...cleanChallenge(body),updated:Date.now()};await store.set('olymp/'+id,c);return {challenge:{...c,teacherName:t.name,teacherSchool:t.school,mine:true}};
+ }
  fail(404,'API әдісі табылмады.');
 }
 
@@ -234,6 +271,6 @@ async function handle(req,store,opts={}){
  catch(e){if(e instanceof ApiError)return {status:e.status,body:{error:e.message}};if(opts.log)opts.log(e);return {status:500,body:{error:'Сервер қатесі. Біраздан соң қайталаңыз.'}};}
 }
 
-const api={handle,SUBJECT_IDS,LIMITS,cleanLesson,cleanProgress};
+const api={handle,SUBJECT_IDS,LIMITS,cleanLesson,cleanChallenge,cleanProgress};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.BilimCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
